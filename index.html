@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>youSinc - Registra il tuo momento</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #f4f4f9; padding: 20px; }
+        .container { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; font-size: 24px; }
+        input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
+        #upload-btn { background: #007bff; color: white; border: none; padding: 15px 20px; border-radius: 50px; cursor: pointer; font-size: 16px; width: 100%; }
+        #status { margin-top: 20px; color: #666; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>youSinc</h1>
+    <p>Inserisci il tuo Nickname per la firma video:</p>
+    <input type="text" id="nickname" placeholder="Esempio: Marco88" required>
+    
+    <div id="upload-area">
+        <p>Riprendi l'evento:</p>
+        <input type="file" id="video-input" accept="video/*" capture="camera" style="display: none;">
+        <button id="upload-btn" onclick="document.getElementById('video-input').click()">🎥 REGISTRA VIDEO</button>
+    </div>
+
+    <div id="status"></div>
+</div>
+
+<script>
+    const videoInput = document.getElementById('video-input');
+    const status = document.getElementById('status');
+
+    videoInput.addEventListener('change', function() {
+        const nickname = document.getElementById('nickname').value;
+        if(!nickname) {
+            alert("Per favore, inserisci prima un nickname!");
+            return;
+        }
+        
+        status.innerText = "Caricamento in corso per " + nickname + "...";
+        // Qui aggiungeremo la logica per inviare il file a Cloudinary
+    });
+</script>
+
+</body>
+</html>
