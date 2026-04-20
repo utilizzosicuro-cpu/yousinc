@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>youSinc - Proiezione Live</title>
+    <style>
+        body { background: black; color: white; margin: 0; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif; }
+        video { max-width: 90%; max-height: 80vh; border: 3px solid #333; border-radius: 10px; box-shadow: 0 0 50px rgba(0,123,255,0.2); }
+        .info { margin-top: 20px; font-size: 24px; color: #aaa; text-transform: uppercase; letter-spacing: 2px; }
+        .highlight { color: #007bff; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div id="player-container" style="text-align: center;">
+        <video id="main-player" autoplay muted playsinline onended="caricaSuccessivo()"></video>
+        <div class="info" id="status-text">In attesa di nuovi video...</div>
+    </div>
+
+<script>
+    const CLOUD_NAME = "dyh5estbo";
+    
+    // Per ora inseriamo manualmente l'ID del video che hai appena caricato 
+    // Lo trovi nella Media Library (es: "matrimonio_test/video_123")
+    let playlist = [
+        { id: "IL_TUO_PUBLIC_ID_QUI", autore: "NicknameTest" }
+    ];
+    
+    let currentIndex = 0;
+    const player = document.getElementById('main-player');
+    const statusText = document.getElementById('status-text');
+
+    function generaUrlConWatermark(publicId, nickname) {
+        // Questa riga è il "cuore" dell'IA di Cloudinary:
+        // l_text:Arial_50_bold: -> Crea il testo
+        // co_white,o_70 -> Bianco, opacità 70%
+        // g_south_east,x_20,y_20 -> Posiziona in basso a destra
+        return `https://res.cloudinary.com/${CLOUD_NAME}/video/upload/l_text:Arial_40_bold:${nickname},co_white,o_70,g_south_east,x_30,y_30/v1/${publicId}.mp4`;
+    }
+
+    function avviaProiezione() {
+        if (playlist.length > 0) {
+            const videoOra = playlist[currentIndex];
+            player.src = generaUrlConWatermark(videoOra.id, videoOra.autore);
+            statusText.innerHTML = `Regia di: <span class="highlight">${videoOra.autore}</span>`;
+            player.play();
+        }
+    }
+
+    function caricaSuccessivo() {
+        currentIndex++;
+        if (currentIndex >= playlist.length) currentIndex = 0; // Ricomincia il giro
+        avviaProiezione();
+    }
+
+    // Fai partire il primo video
+    avviaProiezione();
+</script>
+</body>
+</html>
