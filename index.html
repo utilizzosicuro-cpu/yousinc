@@ -10,7 +10,7 @@
         h1 { color: #333; font-size: 24px; }
         input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
         #upload-btn { background: #007bff; color: white; border: none; padding: 15px 20px; border-radius: 50px; cursor: pointer; font-size: 16px; width: 100%; }
-        #status { margin-top: 20px; color: #666; }
+        #status { margin-top: 20px; color: #666; word-break: break-all; }
     </style>
 </head>
 <body>
@@ -30,11 +30,10 @@
 </div>
 
 <script>
-   <script>
     const videoInput = document.getElementById('video-input');
     const status = document.getElementById('status');
     
-    // SOSTITUISCI QUESTO CON IL TUO CLOUD NAME DI CLOUDINARY
+    // CONFIGURAZIONE CLOUDINARY
     const CLOUD_NAME = "dyh5estbo"; 
     const UPLOAD_PRESET = "yousinc_preset";
 
@@ -54,11 +53,11 @@
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', UPLOAD_PRESET);
-        // Aggiungiamo il nickname come "tag" per riconoscerlo dopo
         formData.append('tags', nickname); 
 
         try {
-            const response = await fetch(`https://api.cloudinary.com/v1_1/${dyh5estbo}/video/upload`, {
+            // CORREZIONE: Qui usiamo la variabile CLOUD_NAME che contiene il tuo ID
+            const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/video/upload`, {
                 method: 'POST',
                 body: formData
             });
@@ -69,14 +68,15 @@
                 status.innerHTML = `✅ Ottimo lavoro <b>${nickname}</b>!<br>Video inviato con successo.`;
                 console.log("URL Video Originale:", data.secure_url);
             } else {
-                status.innerText = "❌ Errore durante il caricamento.";
+                // Se c'è un errore, mostriamo il messaggio di Cloudinary per capire cosa non va
+                status.innerText = "❌ Errore Cloudinary: " + (data.error ? data.error.message : "Sconosciuto");
+                console.error("Errore Dettagliato:", data);
             }
         } catch (error) {
-            console.error(error);
-            status.innerText = "❌ Errore di connessione.";
+            console.error("Errore Connessione:", error);
+            status.innerText = "❌ Errore di connessione al server.";
         }
     });
-</script>
 </script>
 
 </body>
